@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RecordCategoryRepository")
@@ -13,19 +15,24 @@ class RecordCategory
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(name="id", type="integer")
+     * @Groups({"admin"})
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(name="ru_title", type="string", length=255)
+     * @Assert\NotBlank(message="Укажите название ru")
+     * @Groups({"admin"})
      */
-    private $ru_title;
+    private $ruTitle;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(name="en_title", type="string", length=255)
+     * @Assert\NotBlank(message="Укажите название en")
+     * @Groups({"admin"})
      */
-    private $en_title;
+    private $enTitle;
 
     public function getId(): ?int
     {
@@ -34,24 +41,24 @@ class RecordCategory
 
     public function getRuTitle(): ?string
     {
-        return $this->ru_title;
+        return $this->ruTitle;
     }
 
-    public function setRuTitle(string $ru_title): self
+    public function setRuTitle(string $ruTitle): self
     {
-        $this->ru_title = $ru_title;
+        $this->ruTitle = $ruTitle;
 
         return $this;
     }
 
     public function getEnTitle(): ?string
     {
-        return $this->en_title;
+        return $this->enTitle;
     }
 
-    public function setEnTitle(string $en_title): self
+    public function setEnTitle(string $enTitle): self
     {
-        $this->en_title = $en_title;
+        $this->enTitle = $enTitle;
 
         return $this;
     }
