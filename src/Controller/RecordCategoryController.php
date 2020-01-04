@@ -41,13 +41,14 @@ class RecordCategoryController extends AbstractController
         FormService $formService
     ) {
         $this->entityManager = $entityManager;
-        $this->serializer = $serializerService->serializer;
+        $this->serializer = $serializerService;
         $this->formService = $formService;
     }
 
     /**
      * @Route("", name="list", methods={"GET"})
      * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @throws \Doctrine\Common\Annotations\AnnotationException
      * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */
     public function list()
@@ -62,6 +63,7 @@ class RecordCategoryController extends AbstractController
      * @Route("/{id}", name="item", requirements={"id"="\d+"}, methods={"GET"})
      * @param int $id
      * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @throws \Doctrine\Common\Annotations\AnnotationException
      * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */
     public function item(int $id)
@@ -80,6 +82,7 @@ class RecordCategoryController extends AbstractController
      * @Route("", name="create", methods={"POST"})
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @throws \Doctrine\Common\Annotations\AnnotationException
      */
     public function create(Request $request)
     {
@@ -101,6 +104,7 @@ class RecordCategoryController extends AbstractController
      * @param Request $request
      * @param int $id
      * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @throws \Doctrine\Common\Annotations\AnnotationException
      */
     public function update(Request $request, int $id)
     {
