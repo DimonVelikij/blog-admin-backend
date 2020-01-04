@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Record;
 use App\Service\FormService;
 use App\Service\SerializerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -70,13 +72,21 @@ class RecordController extends AbstractController
      * @Route("", name="create", methods={"POST"})
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @throws \Doctrine\Common\Annotations\AnnotationException
      */
     public function create(Request $request)
     {
-        return $this->json([
-            'message'   =>  'Create',
-            'path' => 'src/Controller/RecordController.php',
-        ]);
+        /** @var Record $record */
+        $record = $this->serializer->deserialize($request->getContent(), Record::class, 'json');
+
+        if (!$this->formService->isValid($record)) {
+            return $this->json(['errors' => $this->formService->getErrors()], Response::HTTP_BAD_REQUEST);
+        }
+
+        $this->entityManager->persist($record);
+        $this->entityManager->flush();
+
+        return $this->json(['id' => $record->getId()], Response::HTTP_CREATED);
     }
 
     /**
