@@ -36,7 +36,7 @@ class SerializerService
     {
         $serializer = $this->getSerializer();
 
-        return $serializer->normalize($data, $format, $context);
+        return $serializer->normalize($data, $format, array_merge_recursive($context, $this->getNormalizeContext()));
     }
 
     /**
@@ -105,5 +105,13 @@ class SerializerService
         }
 
         return new Serializer($normalizers, $encoders);
+    }
+
+    /**
+     * @return array
+     */
+    private function getNormalizeContext(): array
+    {
+        return ['groups' => ['admin']];
     }
 }

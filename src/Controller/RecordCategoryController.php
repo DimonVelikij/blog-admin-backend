@@ -20,14 +20,14 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
  */
 class RecordCategoryController extends AbstractController
 {
+    /** @var EntityManagerInterface  */
+    private $entityManager;
+
     /** @var SerializerService  */
     private $serializer;
 
     /** @var FormService */
     private $formService;
-
-    /** @var EntityManagerInterface  */
-    private $entityManager;
 
     /**
      * RecordCategoryController constructor.
@@ -56,7 +56,7 @@ class RecordCategoryController extends AbstractController
         /** @var RecordCategory[] $recordCategories */
         $recordCategories = $this->entityManager->getRepository(RecordCategory::class)->findAll();
 
-        return $this->json($this->serializer->normalize($recordCategories, null, $this->getNormalizeContext()));
+        return $this->json($this->serializer->normalize($recordCategories, null));
     }
 
     /**
@@ -75,7 +75,7 @@ class RecordCategoryController extends AbstractController
             return $this->json('Нет категории с id ' . $id, Response::HTTP_NOT_FOUND);
         }
 
-        return $this->json($this->serializer->normalize($recordCategory, null, $this->getNormalizeContext()));
+        return $this->json($this->serializer->normalize($recordCategory, null));
     }
 
     /**
@@ -159,13 +159,5 @@ class RecordCategoryController extends AbstractController
         $this->entityManager->flush();
 
         return $this->json(['id' => $recordCategoryId]);
-    }
-
-    /**
-     * @return array
-     */
-    private function getNormalizeContext(): array
-    {
-        return ['groups' => ['admin']];
     }
 }
