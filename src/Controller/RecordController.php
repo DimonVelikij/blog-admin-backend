@@ -46,26 +46,32 @@ class RecordController extends AbstractController
     /**
      * @Route("", name="list", methods={"GET"})
      * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @throws \Doctrine\Common\Annotations\AnnotationException
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */
     public function list()
     {
-        return $this->json([
-            'message' => 'List',
-            'path' => 'src/Controller/RecordController.php',
-        ]);
+        $records = $this->entityManager->getRepository(Record::class)->findAll();
+
+        return $this->json($this->serializer->normalize($records));
     }
 
     /**
      * @Route("/{id}", name="item", requirements={"id"="\d+"}, methods={"GET"})
      * @param int $id
      * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @throws \Doctrine\Common\Annotations\AnnotationException
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */
     public function item(int $id)
     {
-        return $this->json([
-            'message'   =>  'Item',
-            'path' => 'src/Controller/RecordController.php',
-        ]);
+        $record = $this->entityManager->getRepository(Record::class)->find($id);
+
+        if (!$record) {
+            return $this->json('Нет заметки с id ' . $id, Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->json($this->serializer->normalize($record));
     }
 
     /**

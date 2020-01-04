@@ -53,10 +53,9 @@ class RecordCategoryController extends AbstractController
      */
     public function list()
     {
-        /** @var RecordCategory[] $recordCategories */
         $recordCategories = $this->entityManager->getRepository(RecordCategory::class)->findAll();
 
-        return $this->json($this->serializer->normalize($recordCategories, null));
+        return $this->json($this->serializer->normalize($recordCategories));
     }
 
     /**
@@ -75,7 +74,7 @@ class RecordCategoryController extends AbstractController
             return $this->json('Нет категории с id ' . $id, Response::HTTP_NOT_FOUND);
         }
 
-        return $this->json($this->serializer->normalize($recordCategory, null));
+        return $this->json($this->serializer->normalize($recordCategory));
     }
 
     /**
