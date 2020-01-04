@@ -67,7 +67,6 @@ class RecordCategoryController extends AbstractController
      */
     public function item(int $id)
     {
-        /** @var RecordCategory $recordCategory */
         $recordCategory = $this->entityManager->getRepository(RecordCategory::class)->find($id);
 
         if (!$recordCategory) {
@@ -107,7 +106,6 @@ class RecordCategoryController extends AbstractController
      */
     public function update(Request $request, int $id)
     {
-        /** @var RecordCategory $recordCategory */
         $recordCategory = $this->entityManager->getRepository(RecordCategory::class)->find($id);
 
         if (!$recordCategory) {
@@ -128,6 +126,7 @@ class RecordCategoryController extends AbstractController
 
     /**
      * @Route("", name="delete_all", methods={"DELETE"})
+     * @return Response
      */
     public function deleteAll()
     {
@@ -146,7 +145,6 @@ class RecordCategoryController extends AbstractController
      */
     public function delete(int $id)
     {
-        /** @var RecordCategory $recordCategory */
         $recordCategory = $this->entityManager->getRepository(RecordCategory::class)->find($id);
 
         if (!$recordCategory) {

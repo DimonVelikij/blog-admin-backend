@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Record;
+use App\Repository\RecordRepository;
 use App\Service\FormService;
 use App\Service\SerializerService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
  * @Route("/records", name="records_")
@@ -100,25 +102,40 @@ class RecordController extends AbstractController
      * @param Request $request
      * @param int $id
      * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @throws \Doctrine\Common\Annotations\AnnotationException
      */
     public function update(Request $request, int $id)
     {
-        return $this->json([
-            'message'   =>  'Update',
-            'path' => 'src/Controller/RecordController.php',
-        ]);
+        $record = $this->entityManager->getRepository(Record::class)->find($id);
+
+        if (!$record) {
+            return $this->json('Нет заметки с id ' . $id, Response::HTTP_NOT_FOUND);
+        }
+
+        $record = $this->serializer->deserialize($request->getContent(), Record::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $record]);
+
+        if (!$this->formService->isValid($record)) {
+            return $this->json(['errors' => $this->formService->getErrors()], Response::HTTP_BAD_REQUEST);
+        }
+
+        $this->entityManager->persist($record);
+        $this->entityManager->flush();
+
+        return $this->json(['id' => $record->getId()]);
     }
 
     /**
      * @Route("", name="delete_all", methods={"DELETE"})
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @return Response
      */
     public function deleteAll()
     {
-        return $this->json([
-            'message'   =>  'DeleteAll',
-            'path' => 'src/Controller/RecordController.php',
-        ]);
+        /** @var RecordRepository $recordRepository */
+        $recordRepository = $this->entityManager->getRepository(Record::class);
+
+        $recordRepository->createQueryBuilder('record')->delete()->getQuery()->getResult();
+
+        return new Response();
     }
 
     /**
@@ -128,9 +145,16 @@ class RecordController extends AbstractController
      */
     public function delete(int $id)
     {
-        return $this->json([
-            'message'   =>  'Delete',
-            'path' => 'src/Controller/RecordController.php',
-        ]);
+        $record = $this->entityManager->getRepository(Record::class)->find($id);
+
+        if (!$record) {
+            return $this->json('Нет заметки с id ' . $id, Response::HTTP_NOT_FOUND);
+        }
+
+        $recordId = $record->getId();
+        $this->entityManager->remove($record);
+        $this->entityManager->flush();
+
+        return $this->json(['id' => $recordId]);
     }
 }
