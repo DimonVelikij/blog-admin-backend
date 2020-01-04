@@ -43,8 +43,12 @@ class RecordCategoryNormalizer extends ObjectNormalizer
 
     public function denormalize($data, string $type, string $format = null, array $context = [])
     {
-        $parent = $data['parent'] ? $this->entityManager->find($type, $data['parent']) : null;
-        unset($data['parent']);
+        if (isset($data['parent']) && $data['parent']) {
+            $parent = $this->entityManager->find($type, $data['parent']);
+            unset($data['parent']);
+        } else {
+            $parent = null;
+        }
 
         $recordCategory = parent::denormalize($data, $type, $format, $context);
         $recordCategory->setParent($parent);

@@ -135,7 +135,7 @@ class RecordCategoryController extends AbstractController
         /** @var RecordCategoryRepository $recordCategoryRepository */
         $recordCategoryRepository = $this->entityManager->getRepository(RecordCategory::class);
 
-        $recordCategoryRepository->createQueryBuilder('record_category')->delete();
+        $recordCategoryRepository->createQueryBuilder('record_category')->delete()->getQuery()->getResult();
 
         return new Response();
     }
