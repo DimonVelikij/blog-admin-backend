@@ -24,14 +24,14 @@ class RecordCategory
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Укажите название ru")
+     * @Assert\NotBlank(message="Укажите название на русском языке")
      * @Groups({"admin"})
      */
     private $ruTitle;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Укажите название en")
+     * @Assert\NotBlank(message="Укажите название на английском языке")
      * @Groups({"admin"})
      */
     private $enTitle;

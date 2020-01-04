@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RecordRepository")
@@ -14,42 +16,55 @@ class Record
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"admin"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Укажите название на русском языке")
+     * @Groups({"admin"})
      */
     private $ruTitle;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Укажите название на английском языке")
+     * @Groups({"admin"})
      */
     private $enTitle;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message="Укажите описание на русском языке")
+     * @Groups({"admin"})
      */
     private $ruDescription;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message="Укажите описание на английском языке")
+     * @Groups({"admin"})
      */
     private $enDescription;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"admin"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"admin"})
      */
     private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\RecordCategory")
      * @ORM\JoinColumn(onDelete="SET NULL")
+     * @Assert\NotBlank(message="Укажите категорию")
+     * @Groups({"admin"})
      */
     private $category;
 
