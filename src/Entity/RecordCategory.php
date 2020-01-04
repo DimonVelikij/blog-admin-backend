@@ -17,20 +17,20 @@ class RecordCategory
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(type="integer")
      * @Groups({"admin"})
      */
     private $id;
 
     /**
-     * @ORM\Column(name="ru_title", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Укажите название ru")
      * @Groups({"admin"})
      */
     private $ruTitle;
 
     /**
-     * @ORM\Column(name="en_title", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Укажите название en")
      * @Groups({"admin"})
      */
@@ -38,7 +38,7 @@ class RecordCategory
 
     /**
      * @ORM\ManyToOne(targetEntity="RecordCategory", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $parent;
 
