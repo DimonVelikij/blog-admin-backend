@@ -6,11 +6,14 @@ use App\Entity\Category;
 use App\Repository\CategoryRepository;
 use App\Service\FormService;
 use App\Service\SerializerService;
+use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -47,9 +50,9 @@ class CategoryController extends AbstractController
 
     /**
      * @Route("", name="list", methods={"GET"})
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     * @throws \Doctrine\Common\Annotations\AnnotationException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @return JsonResponse
+     * @throws AnnotationException
+     * @throws ExceptionInterface
      */
     public function list()
     {
@@ -61,9 +64,9 @@ class CategoryController extends AbstractController
     /**
      * @Route("/{id}", name="item", requirements={"id"="\d+"}, methods={"GET"})
      * @param int $id
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     * @throws \Doctrine\Common\Annotations\AnnotationException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @return JsonResponse
+     * @throws AnnotationException
+     * @throws ExceptionInterface
      */
     public function item(int $id)
     {
@@ -79,8 +82,8 @@ class CategoryController extends AbstractController
     /**
      * @Route("", name="create", methods={"POST"})
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     * @throws \Doctrine\Common\Annotations\AnnotationException
+     * @return JsonResponse
+     * @throws AnnotationException
      */
     public function create(Request $request)
     {
@@ -101,8 +104,8 @@ class CategoryController extends AbstractController
      * @Route("/{id}", name="update", requirements={"id"="\d+"}, methods={"PUT"})
      * @param Request $request
      * @param int $id
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     * @throws \Doctrine\Common\Annotations\AnnotationException
+     * @return JsonResponse
+     * @throws AnnotationException
      */
     public function update(Request $request, int $id)
     {
@@ -141,7 +144,7 @@ class CategoryController extends AbstractController
     /**
      * @Route("/{id}", name="delete", requirements={"id"="\d+"}, methods={"DELETE"})
      * @param int $id
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @return JsonResponse
      */
     public function delete(int $id)
     {
