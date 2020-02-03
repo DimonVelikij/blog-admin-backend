@@ -2,7 +2,7 @@
 
 namespace App\Normalizer;
 
-use App\Entity\RecordCategory;
+use App\Entity\Category;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\PropertyInfo\PropertyTypeExtractorInterface;
@@ -45,7 +45,7 @@ class RecordNormalizer extends ObjectNormalizer
     public function denormalize($data, string $type, string $format = null, array $context = [])
     {
         if (isset($data['category']) && $data['category']) {
-            $category = $this->entityManager->find(RecordCategory::class, $data['category']);
+            $category = $this->entityManager->find(Category::class, $data['category']);
             unset($data['category']);
         } else {
             $category = null;

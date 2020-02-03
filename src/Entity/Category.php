@@ -9,10 +9,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\RecordCategoryRepository")
- * @ORM\Table(name="record_categories")
+ * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
+ * @ORM\Table(name="categories")
  */
-class RecordCategory
+class Category
 {
     /**
      * @ORM\Id()
@@ -37,13 +37,13 @@ class RecordCategory
     private $enTitle;
 
     /**
-     * @ORM\ManyToOne(targetEntity="RecordCategory", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
      * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $parent;
 
     /**
-     * @ORM\OneToMany(targetEntity="RecordCategory", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="Category", mappedBy="parent")
      * @Groups({"admin"})
      */
     private $children;

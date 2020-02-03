@@ -10,13 +10,13 @@ use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactoryInterface;
 use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
-class RecordCategoryNormalizer extends ObjectNormalizer
+class CategoryNormalizer extends ObjectNormalizer
 {
     /** @var EntityManagerInterface  */
     private $entityManager;
 
     /**
-     * RecordCategoryNormalizer constructor.
+     * CategoryNormalizer constructor.
      * @param EntityManagerInterface $entityManager
      * @param ClassMetadataFactoryInterface|null $classMetadataFactory
      * @param NameConverterInterface|null $nameConverter
@@ -50,9 +50,9 @@ class RecordCategoryNormalizer extends ObjectNormalizer
             $parent = null;
         }
 
-        $recordCategory = parent::denormalize($data, $type, $format, $context);
-        $recordCategory->setParent($parent);
+        $category = parent::denormalize($data, $type, $format, $context);
+        $category->setParent($parent);
 
-        return $recordCategory;
+        return $category;
     }
 }

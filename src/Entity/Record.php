@@ -64,7 +64,7 @@ class Record
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\RecordCategory")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category")
      * @ORM\JoinColumn(onDelete="SET NULL")
      * @Assert\NotBlank(message="Укажите категорию")
      * @Groups({"admin"})
@@ -148,12 +148,12 @@ class Record
         return $this;
     }
 
-    public function getCategory(): ?RecordCategory
+    public function getCategory(): ?Category
     {
         return $this->category;
     }
 
-    public function setCategory(?RecordCategory $category): self
+    public function setCategory(?Category $category): self
     {
         $this->category = $category;
 

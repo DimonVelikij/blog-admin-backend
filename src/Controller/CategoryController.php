@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\RecordCategory;
-use App\Repository\RecordCategoryRepository;
+use App\Entity\Category;
+use App\Repository\CategoryRepository;
 use App\Service\FormService;
 use App\Service\SerializerService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,11 +14,11 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * @Route("/record-categories", name="record_categories_")
- * Class RecordCategoryController
+ * @Route("/categories", name="categories_")
+ * Class CategoryController
  * @package App\Controller
  */
-class RecordCategoryController extends AbstractController
+class CategoryController extends AbstractController
 {
     /** @var EntityManagerInterface  */
     private $entityManager;
@@ -30,7 +30,7 @@ class RecordCategoryController extends AbstractController
     private $formService;
 
     /**
-     * RecordCategoryController constructor.
+     * CategoryController constructor.
      * @param EntityManagerInterface $entityManager
      * @param SerializerService $serializerService
      * @param FormService $formService
@@ -53,9 +53,9 @@ class RecordCategoryController extends AbstractController
      */
     public function list()
     {
-        $recordCategories = $this->entityManager->getRepository(RecordCategory::class)->findAll();
+        $categories = $this->entityManager->getRepository(Category::class)->findAll();
 
-        return $this->json($this->serializer->normalize($recordCategories));
+        return $this->json($this->serializer->normalize($categories));
     }
 
     /**
@@ -67,13 +67,13 @@ class RecordCategoryController extends AbstractController
      */
     public function item(int $id)
     {
-        $recordCategory = $this->entityManager->getRepository(RecordCategory::class)->find($id);
+        $category = $this->entityManager->getRepository(Category::class)->find($id);
 
-        if (!$recordCategory) {
+        if (!$category) {
             return $this->json('Нет категории с id ' . $id, Response::HTTP_NOT_FOUND);
         }
 
-        return $this->json($this->serializer->normalize($recordCategory));
+        return $this->json($this->serializer->normalize($category));
     }
 
     /**
@@ -84,17 +84,17 @@ class RecordCategoryController extends AbstractController
      */
     public function create(Request $request)
     {
-        /** @var RecordCategory $recordCategory */
-        $recordCategory = $this->serializer->deserialize($request->getContent(), RecordCategory::class, 'json');
+        /** @var Category $category */
+        $category = $this->serializer->deserialize($request->getContent(), Category::class, 'json');
 
-        if (!$this->formService->isValid($recordCategory)) {
+        if (!$this->formService->isValid($category)) {
             return $this->json(['errors' => $this->formService->getErrors()], Response::HTTP_BAD_REQUEST);
         }
 
-        $this->entityManager->persist($recordCategory);
+        $this->entityManager->persist($category);
         $this->entityManager->flush();
 
-        return $this->json(['id' => $recordCategory->getId()], Response::HTTP_CREATED);
+        return $this->json(['id' => $category->getId()], Response::HTTP_CREATED);
     }
 
     /**
@@ -106,22 +106,22 @@ class RecordCategoryController extends AbstractController
      */
     public function update(Request $request, int $id)
     {
-        $recordCategory = $this->entityManager->getRepository(RecordCategory::class)->find($id);
+        $category = $this->entityManager->getRepository(Category::class)->find($id);
 
-        if (!$recordCategory) {
+        if (!$category) {
             return $this->json('Нет категории с id ' . $id, Response::HTTP_NOT_FOUND);
         }
 
-        $recordCategory = $this->serializer->deserialize($request->getContent(), RecordCategory::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $recordCategory]);
+        $category = $this->serializer->deserialize($request->getContent(), Category::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $category]);
 
-        if (!$this->formService->isValid($recordCategory)) {
+        if (!$this->formService->isValid($category)) {
             return $this->json(['errors' => $this->formService->getErrors()], Response::HTTP_BAD_REQUEST);
         }
 
-        $this->entityManager->persist($recordCategory);
+        $this->entityManager->persist($category);
         $this->entityManager->flush();
 
-        return $this->json(['id' => $recordCategory->getId()]);
+        return $this->json(['id' => $category->getId()]);
     }
 
     /**
@@ -130,10 +130,10 @@ class RecordCategoryController extends AbstractController
      */
     public function deleteAll()
     {
-        /** @var RecordCategoryRepository $recordCategoryRepository */
-        $recordCategoryRepository = $this->entityManager->getRepository(RecordCategory::class);
+        /** @var CategoryRepository $categoryRepository */
+        $categoryRepository = $this->entityManager->getRepository(Category::class);
 
-        $recordCategoryRepository->createQueryBuilder('record_category')->delete()->getQuery()->getResult();
+        $categoryRepository->createQueryBuilder('record_category')->delete()->getQuery()->getResult();
 
         return new Response();
     }
@@ -145,16 +145,16 @@ class RecordCategoryController extends AbstractController
      */
     public function delete(int $id)
     {
-        $recordCategory = $this->entityManager->getRepository(RecordCategory::class)->find($id);
+        $category = $this->entityManager->getRepository(Category::class)->find($id);
 
-        if (!$recordCategory) {
+        if (!$category) {
             return $this->json('Нет категории с id ' . $id, Response::HTTP_NOT_FOUND);
         }
 
-        $recordCategoryId = $recordCategory->getId();
-        $this->entityManager->remove($recordCategory);
+        $categoryId = $category->getId();
+        $this->entityManager->remove($category);
         $this->entityManager->flush();
 
-        return $this->json(['id' => $recordCategoryId]);
+        return $this->json(['id' => $categoryId]);
     }
 }
