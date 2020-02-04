@@ -4,8 +4,10 @@ namespace App\Normalizer;
 
 use App\Entity\Category;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\ORMException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\PropertyInfo\PropertyTypeExtractorInterface;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Mapping\ClassDiscriminatorResolverInterface;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactoryInterface;
 use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
@@ -42,10 +44,19 @@ class RecordNormalizer extends ObjectNormalizer
         $this->entityManager = $entityManager;
     }
 
+    /**
+     * @param mixed $data
+     * @param string $type
+     * @param string|null $format
+     * @param array $context
+     * @return array|object
+     * @throws ExceptionInterface
+     * @throws ORMException
+     */
     public function denormalize($data, string $type, string $format = null, array $context = [])
     {
         if (isset($data['category']) && $data['category']) {
-            $category = $this->entityManager->find(Category::class, $data['category']);
+            $category = $this->entityManager->getReference(Category::class, $data['category']);
             unset($data['category']);
         } else {
             $category = null;
